@@ -3,9 +3,9 @@ let allEpisodes = []; // Global storage for all episodes
 // Runs when the page loads
 function setup() {
   allEpisodes = getAllEpisodes(); // Store all episodes globally
-  displayEpisodes(allEpisodes);   // Draw everything
+  displayEpisodes(allEpisodes); // Draw everything
 
-  setupSearch();                // Setup the search functionality
+  setupSearch(); // Setup the search functionality
 }
 
 // Create ONE episode card and return it
@@ -40,7 +40,7 @@ function createEpisodeCard(episode) {
   card.appendChild(summary);
   card.appendChild(credit);
 
-  return card; 
+  return card;
 }
 
 // Draw ALL episodes in the list
@@ -56,7 +56,6 @@ function displayEpisodes(episodeList) {
 
 // Add the search function.
 function setupSearch() {
-
   const searchInput = document.getElementById("searchInput");
   const searchCount = document.getElementById("searchCount");
 
@@ -64,21 +63,18 @@ function setupSearch() {
     const searchTerm = searchInput.value.toLowerCase();
 
     const filteredEpisodes = allEpisodes.filter((episode) => {
-
       const nameMatch = episode.name.toLowerCase().includes(searchTerm);
 
       const summaryMatch = episode.summary.toLowerCase().includes(searchTerm);
 
       return nameMatch || summaryMatch;
-      
     });
-   
+
     displayEpisodes(filteredEpisodes);
-    
 
     // update counter
     searchCount.innerText = `Displaying ${filteredEpisodes.length} / ${allEpisodes.length} episodes.`;
-});
+  });
 }
 
 window.onload = setup;
