@@ -17,16 +17,11 @@ function setup() {
     .then((episodes) => {
       allEpisodes = episodes; // Store all episodes globally
 
-<<<<<<< HEAD
       displayEpisodes(); // Draw everything
       setupEpisodeSelector();
       setupSearch(); // Setup the search functionality
     })
     .catch((error) => console.error("Caught error:", error.message));
-=======
-  setupSearch();                // Setup the search functionality
-  setupEpisodeSelector();       // Setup the episode dropdown selector
->>>>>>> origin/level-0
 }
 
 // Create ONE episode card and return it
@@ -169,7 +164,6 @@ function setupEpisodeSelector() {
   defaultOption.textContent = "Show All Episodes";
   selectElem.insertBefore(defaultOption, selectElem.firstChild);
 
-
   // Populate the select options
   allEpisodes.forEach((episode) => {
     const option = document.createElement("option");
@@ -182,14 +176,14 @@ function setupEpisodeSelector() {
 
   // Add event listener for selection
   selectElem.addEventListener("change", (event) => {
-  if (event.target.value === "all") {
-    displayEpisodes(allEpisodes);
-  } else {
-    const selectedId = parseInt(event.target.value, 10);
-    const selectedEpisode = allEpisodes.find((ep) => ep.id === selectedId);
-    displayEpisodes(selectedEpisode ? [selectedEpisode] : []);
-  }
-});
+    if (event.target.value === "all") {
+      displayEpisodes(allEpisodes);
+    } else {
+      const selectedId = parseInt(event.target.value, 10);
+      const selectedEpisode = allEpisodes.find((ep) => ep.id === selectedId);
+      displayEpisodes(selectedEpisode ? [selectedEpisode] : []);
+    }
+  });
 }
 
 window.onload = setup;
