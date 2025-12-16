@@ -147,42 +147,10 @@ function setupEpisodeSelector() {
     } else {
       // set searchTerm to the selected episode id so displayEpisodes filters by id
       searchTerm = selectElem.value;
+      console.log(`search Term is ${searchTerm}`);
     }
 
     displayEpisodes();
-  });
-}
-
-function setupEpisodeSelector() {
-  const selectElem = document.createElement("select");
-  const rootElem = document.getElementById("root");
-  rootElem.before(selectElem); // Add the select element above the episode list
-
-  // Add the "Show All Episodes" option
-  const defaultOption = document.createElement("option");
-  defaultOption.value = "all";
-  defaultOption.textContent = "Show All Episodes";
-  selectElem.insertBefore(defaultOption, selectElem.firstChild);
-
-  // Populate the select options
-  allEpisodes.forEach((episode) => {
-    const option = document.createElement("option");
-    const seasonCode = episode.season.toString().padStart(2, "0");
-    const episodeCode = episode.number.toString().padStart(2, "0");
-    option.value = episode.id; // Use a unique identifier
-    option.textContent = `S${seasonCode}E${episodeCode} - ${episode.name}`;
-    selectElem.appendChild(option);
-  });
-
-  // Add event listener for selection
-  selectElem.addEventListener("change", (event) => {
-    if (event.target.value === "all") {
-      displayEpisodes(allEpisodes);
-    } else {
-      const selectedId = parseInt(event.target.value, 10);
-      const selectedEpisode = allEpisodes.find((ep) => ep.id === selectedId);
-      displayEpisodes(selectedEpisode ? [selectedEpisode] : []);
-    }
   });
 }
 
