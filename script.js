@@ -1,3 +1,10 @@
+// create global variables
+
+let allShows = [];          // stores all TV shows (fetched once)
+let allEpisodes = [];      // episodes of the currently selected show
+let episodesCache = {};    // cache episodes by showId
+
+
 const endPoint = "https://api.tvmaze.com/shows/82/episodes";
 
 async function fetchEpisodes() {
@@ -9,7 +16,7 @@ async function fetchEpisodes() {
 
 let searchTerm = "";
 let episodeCount = 0;
-let allEpisodes = []; // Global storage for all episodes
+
 
 // Runs when the page loads
 function setup() {
