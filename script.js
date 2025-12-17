@@ -5,31 +5,85 @@ let allEpisodes = [];      // episodes of the currently selected show
 let episodesCache = {};    // cache episodes by showId
 
 
-const endPoint = "https://api.tvmaze.com/shows/82/episodes";
-
-async function fetchEpisodes() {
-  const response = await fetch(endPoint);
-  if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
-  const data = await response.json();
-  return data;
-}
-
 let searchTerm = "";
 let episodeCount = 0;
 
 
-// Runs when the page loads
-function setup() {
-  fetchEpisodes()
-    .then((episodes) => {
-      allEpisodes = episodes; // Store all episodes globally
 
-      displayEpisodes(); // Draw everything
-      setupEpisodeSelector();
-      setupSearch(); // Setup the search functionality
+function setup() {
+  fetch("https://api.tvmaze.com/shows")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to load shows");
+      }
+      return response.json();
     })
-    .catch((error) => console.error("Caught error:", error.message));
+    .then((shows) => {
+      allShows = shows;          //  store shows globally
+      populateShowSelect();     // fill dropdown
+    })
+    .catch(() => {
+      const root = document.getElementById("root");
+      root.innerHTML = "<p>Sorry, failed to load TV shows.</p>";
+    });
 }
+
+function populateShowSelect() {
+  const showSelect = document.getElementById("showSelect");
+
+  allShows.sort((a, b) =>
+    a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+  );
+
+  showSelect.innerHTML = "";
+
+  const defaultOption = document.createElement("option");
+  defaultOption.textContent = "Select a show";
+  defaultOption.value = "";
+  showSelect.appendChild(defaultOption);
+
+  allShows.forEach((show) => {
+    const option = document.createElement("option");
+    option.value = show.id;
+    option.textContent = show.name;
+    showSelect.appendChild(option);
+  });
+
+  showSelect.addEventListener("change", () => {
+    if (showSelect.value) {
+      loadEpisodesForShow(showSelect.value);
+    }
+  });
+}
+
+function loadEpisodesForShow(showId) {
+  searchTerm = "";
+
+  if (episodesCache[showId]) {
+    allEpisodes = episodesCache[showId];
+    displayEpisodes();
+    setupEpisodeSelector();
+    setupSearch();
+    return;
+  }
+
+  fetch(`https://api.tvmaze.com/shows/${showId}/episodes`)
+    .then((response) => response.json())
+    .then((episodes) => {
+      episodesCache[showId] = episodes;
+      allEpisodes = episodes;
+
+      displayEpisodes();
+      setupEpisodeSelector();
+      setupSearch();
+    })
+    .catch(() => {
+      document.getElementById("root").innerHTML =
+        "<p>Failed to load episodes.</p>";
+    });
+}
+
+
 
 // Create ONE episode card and return it
 function createEpisodeCard(episode) {
